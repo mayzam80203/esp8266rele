@@ -1,8 +1,10 @@
 /*
 НАЙДИ НИЖЕ ТАКИЕ СТРОКИ И ЗАПОЛНИ ИХ
-const char* host = "wifi-rele";
-const char* ssid = "WiFi-my-home";
+const char* host = "rele-remote";
+const char* ssid = "WIFI-HOME";
 const char* password = "1234567890";
+const char* ssidap = "WIFI-rele";
+const char* passwordap = "1234567890";
 */
 
 
@@ -10,7 +12,8 @@ const char* password = "1234567890";
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
-/////////////////////////////////////
+
+
 #define ledPin0 D0
 #define ledPin1 D1
 #define ledPin2 D2
@@ -20,10 +23,15 @@ const char* password = "1234567890";
 #define ledPin6 D6
 #define ledPin7 D7
 #define ledPin8 D8
-///////////////////////////////////////////////////
-const char* host = "wifi-rele";
-const char* ssid = "MOY-WIFI";
-const char* password = "PASSWORD-OT-MOY-WIFI";
+
+
+
+
+const char* host = "rele-remote";
+const char* ssid = "WIFI-HOME";
+const char* password = "1234567890";
+const char* ssidap = "WIFI-rele";
+const char* passwordap = "1234567890";
 
 ESP8266WebServer server(80);
 const char* serverIndex = "<form method='POST' action='/update/update' enctype='multipart/form-data'><input type='file' name='update'><input type='submit' value='Update'></form>";
@@ -31,7 +39,22 @@ const char* serverIndex = "<form method='POST' action='/update/update' enctype='
 void setup(void){
   Serial.begin(115200);
     delay(10);
-////////////////////////////////////////////////////////
+
+////////////////////
+Serial.println();
+  Serial.print("Configuring access point...");
+  /* You can remove the password parameter if you want the AP to be open. */
+  WiFi.softAP(ssidap, passwordap);
+
+  IPAddress myIP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(myIP);
+////////////////////это заменило открытую сеть AP по умолчанию
+
+
+
+
+ 
   pinMode(ledPin0, OUTPUT);
   pinMode(ledPin1, OUTPUT);
   pinMode(ledPin2, OUTPUT);
@@ -41,23 +64,35 @@ void setup(void){
   pinMode(ledPin6, OUTPUT);
   pinMode(ledPin7, OUTPUT);
   pinMode(ledPin8, OUTPUT);
-///////////////////////////////////////////////////////////
-  digitalWrite(ledPin0, 0);
-  digitalWrite(ledPin1, 0);
-  digitalWrite(ledPin2, 0);
-  digitalWrite(ledPin3, 0);
+
+  
+  
+  
+  
+  
+  
+  digitalWrite(ledPin0, 1);
+  digitalWrite(ledPin1, 1);
+  digitalWrite(ledPin2, 1);
+  digitalWrite(ledPin3, 1);
   digitalWrite(ledPin4, 0);
-  digitalWrite(ledPin5, 0);
-  digitalWrite(ledPin6, 0);
-  digitalWrite(ledPin7, 0);
-  digitalWrite(ledPin8, 0);
-//////////////////////////////////////////////////////////
+  digitalWrite(ledPin5, 1);
+  digitalWrite(ledPin6, 1);
+  digitalWrite(ledPin7, 1);
+  digitalWrite(ledPin8, 1);
+
+
+
+    
   Serial.println();
   Serial.println("Booting Sketch...");
   WiFi.mode(WIFI_AP_STA);
   WiFi.begin(ssid, password);
   if(WiFi.waitForConnectResult() == WL_CONNECTED){
     MDNS.begin(host);
+
+
+
  server.on("/", [](){
     server.send(200, "text/html", webPage());
 ////////////////////////SSILKA NA KNOPKU0///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8//////////////////////////////////////////////////
@@ -190,14 +225,17 @@ void setup(void){
  
   });
 
-    //FOR EWB UPDATE START
+
+
+
+    //zamzamzamzamzamzamzamzamzamzamzamzamzamzamzamzamza
     server.on("/update/", HTTP_GET, [](){
       server.sendHeader("Connection", "close");
       server.sendHeader("Access-Control-Allow-Origin", "*");
       server.send(200, "text/html", serverIndex);
     });
   
-    //FOR EWB UPDATE STOP
+   //zamzamzamzamzamzamzamzamzamzamzamzamzamzamzamzamza
    
     server.on("/update/update", HTTP_POST, [](){
       server.sendHeader("Connection", "close");
@@ -249,14 +287,14 @@ String webPage()
   web += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/> <meta charset=\"utf-8\"><title>WIFi-relay-9</title><style>button{color:red;padding: 10px 27px;}</style></head>";
   web += "<h1 style=\"text-align: center;font-family: Open sans;font-weight: 100;font-size: 20px;\">Управление релейным блоком - перед нажатием обнови!</h1><div>";
   
-////////////////////////KNOPKA0///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
+/*////////////////////////KNOPKA0///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
   if (digitalRead(ledPin0) == 1)
   {
     web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #43a209;margin: 0 auto;\">РЕЛЕ 1 ВКЛ</div>";
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 1 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 1 ВЫК</div>";
   }
   web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin0On\"><button>ON</button></a>&nbsp;<a href=\"ledPin0Off\"><button>OFF</button></a></div>";
  ////////////////////////KNOPKA1///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
@@ -266,7 +304,7 @@ String webPage()
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 2 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 2 ВЫК</div>";
   }
   web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin1On\"><button>ON</button></a>&nbsp;<a href=\"ledPin1Off\"><button>OFF</button></a></div>";
  ////////////////////////KNOPKA2///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
@@ -276,37 +314,37 @@ String webPage()
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 3 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 3 ВЫК</div>";
   }
   web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin2On\"><button>ON</button></a>&nbsp;<a href=\"ledPin2Off\"><button>OFF</button></a></div>";
- ////////////////////////KNOPKA3///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
+ /*////////////////////////KNOPKA3///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
   if (digitalRead(ledPin3) == 1)
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #43a209;margin: 0 auto;\">РЕЛЕ 4 ВКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 1 ВЫК</div>";
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 4 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #43a209;margin: 0 auto;\">РЕЛЕ 1 ВКЛ</div>";
   }
-  web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin3On\"><button>ON</button></a>&nbsp;<a href=\"ledPin3Off\"><button>OFF</button></a></div>";
+  web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin3Off\"><button>ON</button></a>&nbsp;<a href=\"ledPin3On\"><button>OFF</button></a></div>";
  ////////////////////////KNOPKA4///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
   if (digitalRead(ledPin4) == 1)
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #43a209;margin: 0 auto;\">РЕЛЕ 5 ВКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 2 ВЫК</div>";
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 5 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #43a209;margin: 0 auto;\">РЕЛЕ 2 ВКЛ</div>";
   }
-  web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin4On\"><button>ON</button></a>&nbsp;<a href=\"ledPin4Off\"><button>OFF</button></a></div>";
- ////////////////////////KNOPKA5///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
+  web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin4Off\"><button>ON</button></a>&nbsp;<a href=\"ledPin4On\"><button>OFF</button></a></div>";
+ /*////////////////////////KNOPKA5///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
   if (digitalRead(ledPin5) == 1)
   {
     web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #43a209;margin: 0 auto;\">РЕЛЕ 6 ВКЛ</div>";
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 6 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 6 ВЫК</div>";
   }
   web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin5On\"><button>ON</button></a>&nbsp;<a href=\"ledPin5Off\"><button>OFF</button></a></div>";
  ////////////////////////KNOPKA6///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
@@ -316,7 +354,7 @@ String webPage()
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 7 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 7 ВЫК</div>";
   }
   web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin6On\"><button>ON</button></a>&nbsp;<a href=\"ledPin6Off\"><button>OFF</button></a></div>";
  ////////////////////////KNOPKA7///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
@@ -326,7 +364,7 @@ String webPage()
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 8 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 8 ВЫК</div>";
   }
   web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin7On\"><button>ON</button></a>&nbsp;<a href=\"ledPin7Off\"><button>OFF</button></a></div>";
  ////////////////////////KNOPKA8///////ledPin0, ledPin1, ledPin2, ledPin3, ledPin4, ledPin5, ledPin6, ledPin7, ledPin8////////////////////////////////////////////////// 
@@ -336,11 +374,15 @@ String webPage()
   }
   else 
   {
-    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 9 ВЫКЛ</div>";
+    web += "<div style=\"text-align: center;width: 98px;color:white ;padding: 10px 30px;background-color: #ec1212;margin: 0 auto;\">РЕЛЕ 9 ВЫК</div>";
   }
   web += "<div style=\"text-align: center;margin: 5px 0px;\"> <a href=\"ledPin8On\"><button>ON</button></a>&nbsp;<a href=\"ledPin8Off\"><button>OFF</button></a></div>";
- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  
+ 
+
+ 
+  
   // ========REFRESH=============
   web += "<div style=\"text-align:center;margin-top: 20px;\"><a href=\"/\"><button style=\"width:158px;\">REFRESH</button></a></div>";
   // ========REFRESH=============
