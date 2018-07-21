@@ -2,10 +2,10 @@
 
 /*
 НАЙДИ НИЖЕ ТАКИЕ СТРОКИ И ЗАПОЛНИ ИХ ПОД СВОЮ СЕТЬ
-const char* host = "esp-RELE";
-const char* ssid = "WiFi-home";
+const char* host = "rele-remote";
+const char* ssid = "WIFI-HOME";
 const char* password = "1234567890";
-const char* ssidap = "ESP-RELE";
+const char* ssidap = "WIFI-rele";
 const char* passwordap = "1234567890";
 */
 ///////////////ZAM  "ПЕРЕМЕННЫЕ"-ВЫШЕ//////////////////////////////////////////////////////////////
@@ -31,10 +31,10 @@ const char* passwordap = "1234567890";
 
 
 
-const char* host = "esp-RELE";
-const char* ssid = "WiFi-home";
+const char* host = "rele-remote";
+const char* ssid = "WIFI-HOME";
 const char* password = "1234567890";
-const char* ssidap = "ESP-RELE";
+const char* ssidap = "WIFI-rele";
 const char* passwordap = "1234567890";
 
 ESP8266WebServer server(80);
