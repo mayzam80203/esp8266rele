@@ -1,8 +1,10 @@
 /*
-НАЙДИ НИЖЕ ТАКИЕ СТРОКИ И ЗАПОЛНИ ИХ
-const char* host = "wifi-rele";
-const char* ssid = "WiFi-my-home";
+НАЙДИ НИЖЕ ТАКИЕ СТРОКИ И ЗАПОЛНИ ИХ под свою сеть
+const char* host = "rele-remote";
+const char* ssid = "WIFI-HOME";
 const char* password = "1234567890";
+const char* ssidap = "WIFI-rele";
+const char* passwordap = "1234567890";
 */
 
 
@@ -25,11 +27,11 @@ const char* password = "1234567890";
 
 
 
-const char* host = "wifi-rele";
-const char* ssid = "assol2";
-const char* password = "077780203";
-const char* ssidap = "WIFI-ESP01";
-const char* passwordap = "P@$$w0rdZAM";
+const char* host = "rele-remote";
+const char* ssid = "WIFI-HOME";
+const char* password = "1234567890";
+const char* ssidap = "WIFI-rele";
+const char* passwordap = "1234567890";
 
 ESP8266WebServer server(80);
 const char* serverIndex = "<form method='POST' action='/update/update' enctype='multipart/form-data'><input type='file' name='update'><input type='submit' value='Update'></form>";
